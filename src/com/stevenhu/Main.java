@@ -11,23 +11,27 @@ import java.util.List;
 public class Main {
 	
 	public static void main(String[] args) throws InterruptedException {
-
+		
 		Terminal terminal = TerminalFacade.createTerminal(System.in, System.out, Charset.forName("UTF8"));
 		terminal.enterPrivateMode();
 		terminal.setCursorVisible(false);
 		List<Flake> flakes = new ArrayList<>();
-		
+		int stormLevel = 10;
 		while (true) {
 			
 			updateFlake(flakes);
-			flakes.add(new Flake());
-			drawFlake(terminal, flakes);
-			Key key;
-			do {
-				Thread.sleep(5);
-				key = terminal.readInput();
+			for (int i = 0; i < stormLevel; i++) {
+				flakes.add(new Flake());
 			}
-			while (key == null);
+			
+			drawFlake(terminal, flakes);
+//			Uncomment following code so it waits for input
+//			Key key;
+//			do {
+				Thread.sleep(100);
+//				key = terminal.readInput();
+//			}
+//			while (key == null);
 			
 			
 		}
@@ -38,27 +42,50 @@ public class Main {
 		for (Flake flake :
 				flakes) {
 			terminal.moveCursor(flake.x, flake.y);
-			terminal.putCharacter('O');
+			terminal.putCharacter('*');
 		}
 	}
 	
 	private static void updateFlake(List<Flake> flakes) {
 		for (Flake flake : flakes) {
-			if (canMove(flake, flakes) && flake.y <= 25) {
+			if (canMoveDown(flake, flakes) && flake.y <= 27) {
+				flake.y += 1;
+			} else if (canMoveLeft(flake, flakes) && flake.y <= 27 && flake.x > 0) {
+				flake.x -= 1;
+				flake.y += 1;
+			} else if (canMoveRight(flake, flakes) && flake.y <= 27 && flake.x < 99) {
+				flake.x += 1;
 				flake.y += 1;
 			}
 		}
 		
 	}
 	
-	private static boolean canMove(Flake flake, List<Flake> flakes) {
+	private static boolean canMoveDown(Flake flake, List<Flake> flakes) {
 		for (Flake f : flakes) {
-			if (flake.x == f.x && (flake.y + 1) == f.y){
+			if (flake.x == f.x && (flake.y + 1) == f.y) {
 				return false;
 			}
 		}
 		return true;
-
+	}
+	
+	private static boolean canMoveLeft(Flake flake, List<Flake> flakes) {
+		for (Flake f : flakes) {
+			if (flake.x - 1 == f.x && (flake.y + 1) == f.y) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	private static boolean canMoveRight(Flake flake, List<Flake> flakes) {
+		for (Flake f : flakes) {
+			if (flake.x + 1 == f.x && (flake.y + 1) == f.y) {
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	
