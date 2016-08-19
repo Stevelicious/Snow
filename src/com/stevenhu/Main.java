@@ -42,7 +42,12 @@ public class Main {
 		for (Flake flake :
 				flakes) {
 			terminal.moveCursor(flake.x, flake.y);
-			terminal.putCharacter('*');
+			if (flake.stationary){
+				terminal.putCharacter('\u2588');
+			}else{
+				terminal.putCharacter('*');
+			}
+			
 		}
 	}
 	
@@ -56,6 +61,8 @@ public class Main {
 			} else if (canMoveRight(flake, flakes) && flake.y <= 27 && flake.x < 99) {
 				flake.x += 1;
 				flake.y += 1;
+			} else{
+				flake.stationary = true;
 			}
 		}
 		

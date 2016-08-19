@@ -8,11 +8,13 @@ import java.util.Random;
 public class Flake {
 	public int x;
 	public int y;
+	public boolean stationary;
 	
 	public Flake(){
 		Random rand = new Random();
 		x = rand.nextInt(100);
 		y = 0;
+		stationary = false;
 	}
 	
 }
