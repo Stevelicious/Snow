@@ -1,7 +1,6 @@
 package com.stevenhu;
 
 import com.googlecode.lanterna.TerminalFacade;
-import com.googlecode.lanterna.input.Key;
 import com.googlecode.lanterna.terminal.Terminal;
 
 import java.nio.charset.Charset;
@@ -16,7 +15,7 @@ public class Main {
 		terminal.enterPrivateMode();
 		terminal.setCursorVisible(false);
 		List<Flake> flakes = new ArrayList<>();
-		int stormLevel = 10;
+		int stormLevel = 20;
 		while (true) {
 			
 			updateFlake(flakes);
@@ -24,11 +23,12 @@ public class Main {
 				flakes.add(new Flake());
 			}
 			
+			
 			drawFlake(terminal, flakes);
 //			Uncomment following code so it waits for input
 //			Key key;
 //			do {
-				Thread.sleep(100);
+				Thread.sleep(50);
 //				key = terminal.readInput();
 //			}
 //			while (key == null);
@@ -55,10 +55,10 @@ public class Main {
 		for (Flake flake : flakes) {
 			if (canMoveDown(flake, flakes) && flake.y <= 27) {
 				flake.y += 1;
-			} else if (canMoveLeft(flake, flakes) && flake.y <= 27 && flake.x > 0) {
+			} else if (canSlideLeft(flake, flakes) && flake.y <= 27 && flake.x > 0) {
 				flake.x -= 1;
 				flake.y += 1;
-			} else if (canMoveRight(flake, flakes) && flake.y <= 27 && flake.x < 99) {
+			} else if (canSlideRight(flake, flakes) && flake.y <= 27 && flake.x < 99) {
 				flake.x += 1;
 				flake.y += 1;
 			} else{
@@ -68,27 +68,27 @@ public class Main {
 		
 	}
 	
-	private static boolean canMoveDown(Flake flake, List<Flake> flakes) {
-		for (Flake f : flakes) {
-			if (flake.x == f.x && (flake.y + 1) == f.y) {
+	private static boolean canMoveDown(Flake flakeToCheck, List<Flake> flakes) {
+		for (Flake flake : flakes) {
+			if (flakeToCheck.x == flake.x && (flakeToCheck.y + 1) == flake.y) {
 				return false;
 			}
 		}
 		return true;
 	}
 	
-	private static boolean canMoveLeft(Flake flake, List<Flake> flakes) {
-		for (Flake f : flakes) {
-			if (flake.x - 1 == f.x && (flake.y + 1) == f.y) {
+	private static boolean canSlideLeft(Flake flakeToCheck, List<Flake> flakes) {
+		for (Flake flake : flakes) {
+			if (flakeToCheck.x - 1 == flake.x && (flakeToCheck.y + 1) == flake.y) {
 				return false;
 			}
 		}
 		return true;
 	}
 	
-	private static boolean canMoveRight(Flake flake, List<Flake> flakes) {
-		for (Flake f : flakes) {
-			if (flake.x + 1 == f.x && (flake.y + 1) == f.y) {
+	private static boolean canSlideRight(Flake flakeToCheck, List<Flake> flakes) {
+		for (Flake flake : flakes) {
+			if (flakeToCheck.x + 1 == flake.x && (flakeToCheck.y + 1) == flake.y) {
 				return false;
 			}
 		}
